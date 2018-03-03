@@ -1,15 +1,11 @@
-# What is this?
+# 概述
 
-使用了 Spring Boot 构建的 Prometheus exporter，用于收集PaaS服务组件的监控数据 
-(参考了https://njalnordmark.wordpress.com/2017/05/08/using-prometheus-with-spring-boot/).
+使用了 Spring Boot 构建的 Prometheus exporter，用于收集PaaS服务组件的监控数据。
 
-## Usage
-构建:
-
+构建方法:
 `./gradlew build`
 
-运行:
-
+运行命令:
 `java -jar build/libs/ai-prometheus-exporter-0.1.0.jar`
 
 应用运行在 <http://localhost:8080/>,
