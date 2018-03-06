@@ -9,7 +9,7 @@ group 'com.ai'
 
 jar {
 	baseName = 'spring-boot-with-prometheus'
-    version =  '0.1.0'
+    version =  '0.1.1'
     //include "application.yml"
     manifest {
         attributes 'Main-Class': 'com.asiainfo.prometheus.SpringBootPrometheusApplication',

@@ -1,6 +1,6 @@
 endpoints:
   prometheus:
-    path: "metrics"
+    path: "ali-metrics"
 
 management:
   port: 8081
