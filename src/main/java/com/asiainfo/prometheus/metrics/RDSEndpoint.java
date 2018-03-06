@@ -14,9 +14,9 @@ public class RDSEndpoint extends Collector {
     public List<MetricFamilySamples> collect() {
         List<MetricFamilySamples> mfs = new ArrayList<MetricFamilySamples>();
         GaugeMetricFamily metricFamily =
-            new GaugeMetricFamily("rds-metric-xxxxxx", "Active-connections", Collections.singletonList("pool"));
+            new GaugeMetricFamily("rds_metric_slow_qry", "active_connections", Collections.singletonList("pool"));
         
-        metricFamily.addMetric(Collections.singletonList("xxxxxx"), NANOSECONDS_PER_SECOND);
+        metricFamily.addMetric(Collections.singletonList("rds_test_slow_qry"), NANOSECONDS_PER_SECOND);
         mfs.add(metricFamily);
         return mfs;
     }

@@ -24,7 +24,7 @@ public class MQEndpoint extends Collector {
 
         // 创建metrics指标
         GaugeMetricFamily labeledGauge = new GaugeMetricFamily("mq_topic_metrics_diff_total",
-            "mq_topic_metrics_diff_total", Arrays.asList("topic-name"));
+            "mq_topic_metrics_diff_total", Arrays.asList("topic_name"));
 
         // 获取consumerID订阅的所有topic的堆积数据。
         List<MQBean> mqDetails = mqService.getTotalDiff();
