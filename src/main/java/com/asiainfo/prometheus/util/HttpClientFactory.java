@@ -1,5 +1,5 @@
 // package com.asiainfo.prometheus.export;
-package com.asiainfo.prometheus.mq;
+package com.asiainfo.prometheus.util;
 
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;

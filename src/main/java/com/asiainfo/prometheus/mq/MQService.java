@@ -1,16 +1,15 @@
 package com.asiainfo.prometheus.mq;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import com.aliyun.openservices.ons.api.impl.authority.OnsAuthSigner;
+import com.asiainfo.prometheus.util.HttpClientFactory;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.ParseException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
@@ -19,7 +18,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class HttpUtils {
+public class MQService {
     public static HttpResponse postRequest(String url, String... args) {
         Map<String, String> paras = new TreeMap<>();
         paras.put("_accesskey", "2SbUQlH7FJKyur9V");
@@ -31,7 +30,7 @@ public class HttpUtils {
             paras.put(kv[0], kv[1]);
         }
 
-        String origin = HttpUtils.combineContent(paras);
+        String origin = MQService.combineContent(paras);
         String signature = OnsAuthSigner.calSignature(origin, "WGoQpjLNgTA4VwrHNQBcqe0zDbXZti");
         paras.put("_signature", signature);
 

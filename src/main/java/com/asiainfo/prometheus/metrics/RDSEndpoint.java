@@ -10,18 +10,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class RDSEndpoint extends Collector {
-    @Override
+
     public List<MetricFamilySamples> collect() {
-        List<MetricFamilySamples> mfs = new ArrayList<>();
-
-        // 创建metrics指标
-        GaugeMetricFamily labeledGauge = new GaugeMetricFamily("rds_custom_metrics", "custom metrics",
-            Collections.singletonList("labelname"));
-
-        // 设置指标的label以及value
-        labeledGauge.addMetric(Collections.singletonList("labelvalue"), 1);
-
-        mfs.add(labeledGauge);
+        List<MetricFamilySamples> mfs = new ArrayList<MetricFamilySamples>();
+        GaugeMetricFamily metricFamily =
+            new GaugeMetricFamily("rds-metric-xxxxxx", "Active-connections", Collections.singletonList("pool"));
+        
+        metricFamily.addMetric(Collections.singletonList("xxxxxx"), NANOSECONDS_PER_SECOND);
+        mfs.add(metricFamily);
         return mfs;
     }
+
 }
