@@ -6,3 +6,12 @@ management:
   port: 8081
   security:
     enabled: false
+
+mq:
+  accesskey: 2SbUQlH7FJKyur9V
+  platform: onsConsole
+  securityKey: WGoQpjLNgTA4VwrHNQBcqe0zDbXZti
+  serviceUrl: http://mq.console.cpct.com.cn/json/consumer/accumulate
+  regionId: shihua
+  consumerId: CID_CRM_TEST_1206
+  hasDetail: true

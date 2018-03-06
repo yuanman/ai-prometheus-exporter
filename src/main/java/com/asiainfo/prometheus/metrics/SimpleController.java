@@ -18,10 +18,4 @@ public class SimpleController {
         mqExporter.register();
         rdsExporter.register();
     }
-    
-    @RequestMapping("/endpoint")
-    public void endpoint() {
-        mqExporter.collect();
-        rdsExporter.collect();
-    }
 }

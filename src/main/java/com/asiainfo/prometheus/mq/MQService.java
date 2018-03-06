@@ -17,12 +17,23 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MQService {
-    public static HttpResponse postRequest(String url, String... args) {
+    
+    @Autowired
+    private MQConfig mqconfig;
+
+    public HttpResponse postRequest(String url, String... args) {
+        String accesskey = mqconfig.getAccesskey(); //2SbUQlH7FJKyur9V
+        String platform = mqconfig.getPlatform();   //onsConsole
+        String securityKey = mqconfig.getSecurityKey(); //WGoQpjLNgTA4VwrHNQBcqe0zDbXZti
+        
         Map<String, String> paras = new TreeMap<>();
-        paras.put("_accesskey", "2SbUQlH7FJKyur9V");
-        paras.put("_platform", "onsConsole");
+        paras.put("_accesskey", accesskey);
+        paras.put("_platform", platform);
         paras.put("__preventCache", String.valueOf(System.currentTimeMillis()));
 
         for (String arg : args) {
@@ -31,7 +42,7 @@ public class MQService {
         }
 
         String origin = MQService.combineContent(paras);
-        String signature = OnsAuthSigner.calSignature(origin, "WGoQpjLNgTA4VwrHNQBcqe0zDbXZti");
+        String signature = OnsAuthSigner.calSignature(origin, securityKey);
         paras.put("_signature", signature);
 
         List<NameValuePair> data = new ArrayList<>();
@@ -61,22 +72,25 @@ public class MQService {
     }
 
     public List<MQBean> getTotalDiff() {
-        HttpResponse response = postRequest("http://mq.console.cpct.com.cn/json/consumer/accumulate",
-            "_regionId:shihua", "consumerId:CID_CRM_TEST_1206", "detail:true");
+        String serviceUrl = mqconfig.getServiceUrl();  
+        String regionId = mqconfig.getRegionId();   
+        String consumerId = mqconfig.getConsumerId();  
+        String hasDetail = mqconfig.getHasDetail();  
+        HttpResponse response = postRequest(serviceUrl,
+            "_regionId:"+regionId, "consumerId:"+consumerId, "detail:"+hasDetail);
+        
         List<MQBean> list = new ArrayList<MQBean>();
         try {
             String json = EntityUtils.toString(response.getEntity());
 //            System.out.println(json);
-            
             JSONObject object = new JSONObject(json);
             JSONObject data = (JSONObject) object.get("data");
             JSONArray jsonArray = data.getJSONArray("detailInTopicList");
 //            System.out.println(jsonArray);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
-//                System.out.println(obj.toString());
-                System.out.println("++++++++ topic is : " + obj.get("topic"));
-                System.out.println("++++++++ totalDiff is : " + obj.get("totalDiff"));
+                System.out.println("++++ topic is : " + obj.get("topic") +
+                    "  ++++ totalDiff is : " + obj.get("totalDiff"));
                 
                 MQBean bean = new MQBean();
                 bean.setTopic((String)obj.get("topic"));
