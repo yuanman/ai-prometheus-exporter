@@ -2,9 +2,6 @@
 
 使用了 Spring Boot 构建的 Prometheus exporter，用于收集PaaS服务组件的监控数据。
 
-构建方法:
-`./gradlew build`
-
 运行命令:
 `java -jar build/libs/ai-prometheus-exporter-0.1.0.jar`
 
