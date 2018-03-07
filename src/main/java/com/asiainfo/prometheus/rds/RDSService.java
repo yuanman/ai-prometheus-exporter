@@ -13,6 +13,7 @@ import java.util.TreeMap;
 
 import com.aliyun.openservices.ons.api.impl.authority.OnsAuthSigner;
 import com.asiainfo.prometheus.util.HttpClientFactory;
+import com.asiainfo.prometheus.util.ServiceConfig;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -22,20 +23,39 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RDSService {
+    
+    @Autowired
+    private static ServiceConfig config;
+    
     public static HttpResponse postRequest(String url, String... args) {
+//        String accesskey = config.getAccesskey(); //2SbUQlH7FJKyur9V
+//        String securityKey = config.getSecurityKey(); //WGoQpjLNgTA4VwrHNQBcqe0zDbXZti
+//        String format = config.getRdsFormat();   //JSON
+//        String version = config.getRdsVersion();   //2014-08-15
+//        String signatureMethod = config.getRdsSignatureMethod();   //HMAC-SHA1
+//        String signatureVersion = config.getRdsSignatureVersion();   //1.0
+        
+        String accesskey = "2SbUQlH7FJKyur9V";
+        String securityKey = "WGoQpjLNgTA4VwrHNQBcqe0zDbXZti";
+        String format = "JSON";
+        String version = "2014-08-15";
+        String signatureMethod = "HMAC-SHA1";
+        String signatureVersion = "1.0";
+        
         Map<String, String> paras = new TreeMap<>();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         df.setTimeZone(TimeZone.getTimeZone("GMT"));
-        paras.put("Format", "JSON");
-        paras.put("Version", "2014-08-15");
-        paras.put("SignatureMethod", "HMAC-SHA1");
+        paras.put("Format", format);
+        paras.put("Version", version);
+        paras.put("SignatureMethod", signatureMethod);
         paras.put("SignatureNonce", String.valueOf(System.currentTimeMillis()));
-        paras.put("SignatureVersion", "1.0");
-        paras.put("AccessKeyId", "2SbUQlH7FJKyur9V");
+        paras.put("SignatureVersion", signatureVersion);
+        paras.put("AccessKeyId", accesskey);
         paras.put("Timestamp", df.format(new Date()));
 
         for (String arg : args) {
@@ -44,7 +64,7 @@ public class RDSService {
         }
 
         String origin = RDSService.combineContent(paras);
-        String signature = OnsAuthSigner.calSignature(origin, "WGoQpjLNgTA4VwrHNQBcqe0zDbXZti" + "&");
+        String signature = OnsAuthSigner.calSignature(origin, securityKey + "&");
         paras.put("Signature", signature);
 
         List<NameValuePair> data = new ArrayList<>();
@@ -63,6 +83,7 @@ public class RDSService {
             throw new RuntimeException(
                 String.format("Exception occurred when post a http request[%s], msg[%s]", url, e.getMessage()));
         }
+        
         return response;
     }
 
