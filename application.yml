@@ -7,11 +7,22 @@ management:
   security:
     enabled: false
 
-mq:
+srv:
   accesskey: 2SbUQlH7FJKyur9V
-  platform: onsConsole
   securityKey: WGoQpjLNgTA4VwrHNQBcqe0zDbXZti
-  serviceUrl: http://mq.console.cpct.com.cn/json/consumer/accumulate
-  regionId: shihua
-  consumerId: CID_CRM_TEST_1206
+  
+  mqPlatform: onsConsole
+  mqUrl: http://mq.console.cpct.com.cn/json/consumer/accumulate
+  mqRegionId: shihua
+  mqConsumerId: CID_CRM_TEST_1206
+  mqTopicDetail: true
+  
+  rdsFormat: JSON
+  rdsVersion: 2014-08-15
+  rdsSignatureMethod: HMAC-SHA1
+  rdsSignatureVersion: 1.0
+  rdsUrl: http://rds.cpct.com.cn
+  rdsAction: DescribeSlowLogs
+  rdsDBInstanceId: rds2439awoqx0363m0ib
   hasDetail: true
+  

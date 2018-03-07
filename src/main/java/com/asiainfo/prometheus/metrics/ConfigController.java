@@ -1,6 +1,6 @@
 package com.asiainfo.prometheus.metrics;
 
-import com.asiainfo.prometheus.mq.MQConfig;
+import com.asiainfo.prometheus.util.ServiceConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class ConfigController {
 
     @Autowired
-    private MQConfig mqconfig;
+    private ServiceConfig config;
     
     @RequestMapping(value = "index", method = RequestMethod.GET)
     public String index() {
-        return "acceskey: "+mqconfig.getAccesskey();
+        return "acceskey: " + config.getAccesskey();
     }
 }

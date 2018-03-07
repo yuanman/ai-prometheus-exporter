@@ -7,6 +7,7 @@ import java.util.TreeMap;
 
 import com.aliyun.openservices.ons.api.impl.authority.OnsAuthSigner;
 import com.asiainfo.prometheus.util.HttpClientFactory;
+import com.asiainfo.prometheus.util.ServiceConfig;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -24,12 +25,12 @@ import org.springframework.stereotype.Component;
 public class MQService {
     
     @Autowired
-    private MQConfig mqconfig;
+    private ServiceConfig config;
 
     public HttpResponse postRequest(String url, String... args) {
-        String accesskey = mqconfig.getAccesskey(); //2SbUQlH7FJKyur9V
-        String platform = mqconfig.getPlatform();   //onsConsole
-        String securityKey = mqconfig.getSecurityKey(); //WGoQpjLNgTA4VwrHNQBcqe0zDbXZti
+        String accesskey = config.getAccesskey(); //2SbUQlH7FJKyur9V
+        String platform = config.getMqPlatform();   //onsConsole
+        String securityKey = config.getSecurityKey(); //WGoQpjLNgTA4VwrHNQBcqe0zDbXZti
         
         Map<String, String> paras = new TreeMap<>();
         paras.put("_accesskey", accesskey);
@@ -72,10 +73,10 @@ public class MQService {
     }
 
     public List<MQBean> getTotalDiff() {
-        String serviceUrl = mqconfig.getServiceUrl();  
-        String regionId = mqconfig.getRegionId();   
-        String consumerId = mqconfig.getConsumerId();  
-        String hasDetail = mqconfig.getHasDetail();  
+        String serviceUrl = config.getMqUrl();  
+        String regionId = config.getMqRegionId();   
+        String consumerId = config.getMqConsumerId();  
+        String hasDetail = config.getMqTopicDetail();  
         HttpResponse response = postRequest(serviceUrl,
             "_regionId:"+regionId, "consumerId:"+consumerId, "detail:"+hasDetail);
         
