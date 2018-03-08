@@ -10,13 +10,11 @@ management:
 srv:
   accesskey: 2SbUQlH7FJKyur9V
   securityKey: WGoQpjLNgTA4VwrHNQBcqe0zDbXZti
-  
   mqPlatform: onsConsole
   mqUrl: http://mq.console.cpct.com.cn/json/consumer/accumulate
   mqRegionId: shihua
   mqConsumerId: CID_CRM_TEST_1206
   mqTopicDetail: true
-  
   rdsFormat: JSON
   rdsVersion: 2014-08-15
   rdsSignatureMethod: HMAC-SHA1
@@ -24,5 +22,5 @@ srv:
   rdsUrl: http://rds.cpct.com.cn
   rdsAction: DescribeSlowLogs
   rdsDBInstanceId: rds2439awoqx0363m0ib
-  hasDetail: true
+  rdsDBName: test
   

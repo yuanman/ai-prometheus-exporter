@@ -24,6 +24,7 @@ public class ServiceConfig {
     private String rdsUrl;
     private String rdsAction;
     private String rdsDBInstanceId;
+    private String rdsDBName;
     
     public String getAccesskey() {
         return accesskey;
@@ -108,6 +109,12 @@ public class ServiceConfig {
     }
     public void setRdsDBInstanceId(String rdsDBInstanceId) {
         this.rdsDBInstanceId = rdsDBInstanceId;
+    }
+    public String getRdsDBName() {
+        return rdsDBName;
+    }
+    public void setRdsDBName(String rdsDBName) {
+        this.rdsDBName = rdsDBName;
     }
         
 }

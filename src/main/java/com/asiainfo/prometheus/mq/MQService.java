@@ -25,9 +25,9 @@ import org.springframework.stereotype.Component;
 public class MQService {
     
     @Autowired
-    private static ServiceConfig config;
+    private ServiceConfig config;
 
-    public static HttpResponse postRequest(String url, String... args) {
+    public HttpResponse postRequest(String url, String... args) {
         String accesskey = config.getAccesskey(); //2SbUQlH7FJKyur9V
         String platform = config.getMqPlatform();   //onsConsole
         String securityKey = config.getSecurityKey(); //WGoQpjLNgTA4VwrHNQBcqe0zDbXZti

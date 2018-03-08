@@ -23,6 +23,8 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,22 +32,22 @@ import org.springframework.stereotype.Component;
 public class RDSService {
     
     @Autowired
-    private static ServiceConfig config;
+    private ServiceConfig config;
     
-    public static HttpResponse postRequest(String url, String... args) {
-//        String accesskey = config.getAccesskey(); //2SbUQlH7FJKyur9V
-//        String securityKey = config.getSecurityKey(); //WGoQpjLNgTA4VwrHNQBcqe0zDbXZti
-//        String format = config.getRdsFormat();   //JSON
-//        String version = config.getRdsVersion();   //2014-08-15
-//        String signatureMethod = config.getRdsSignatureMethod();   //HMAC-SHA1
-//        String signatureVersion = config.getRdsSignatureVersion();   //1.0
+    public HttpResponse postRequest(String url, String... args) {
+        String accesskey = config.getAccesskey(); //2SbUQlH7FJKyur9V
+        String securityKey = config.getSecurityKey(); //WGoQpjLNgTA4VwrHNQBcqe0zDbXZti
+        String format = config.getRdsFormat();   //JSON
+        String version = config.getRdsVersion();   //2014-08-15
+        String signatureMethod = config.getRdsSignatureMethod();   //HMAC-SHA1
+        String signatureVersion = config.getRdsSignatureVersion();   //1.0
         
-        String accesskey = "2SbUQlH7FJKyur9V";
-        String securityKey = "WGoQpjLNgTA4VwrHNQBcqe0zDbXZti";
-        String format = "JSON";
-        String version = "2014-08-15";
-        String signatureMethod = "HMAC-SHA1";
-        String signatureVersion = "1.0";
+//        String accesskey = "2SbUQlH7FJKyur9V";
+//        String securityKey = "WGoQpjLNgTA4VwrHNQBcqe0zDbXZti";
+//        String format = "JSON";
+//        String version = "2014-08-15";
+//        String signatureMethod = "HMAC-SHA1";
+//        String signatureVersion = "1.0";
         
         Map<String, String> paras = new TreeMap<>();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
@@ -112,21 +114,44 @@ public class RDSService {
         return res;
     }
 
-    public static void main(String[] args) {
-        // 查看慢日志统计
-        HttpResponse response = postRequest("http://rds.cpct.com.cn", "Action:DescribeSlowLogs",
-            "DBInstanceId:rds2439awoqx0363m0ib", "StartTime:2018-01-01Z", "EndTime:2018-03-02Z");
-        // 查看慢日志明细
-        // HttpResponse response=postRequest("http://rds.cpct.com.cn",
-        // "Action:DescribeSlowLogRecords",
-        // "DBInstanceId:rds2439awoqx0363m0ib",
-        // "StartTime:2018-03-01T12:00Z",
-        // "EndTime:2018-03-01T13:00Z");
+    /**
+     * 调用RDS的DescribeSlowLogs方法，获取慢查询sql数量。
+     * @return
+     */
+    public RDSBean getSlowCount() {
+        String rdsUrl = config.getRdsUrl();  
+        String dbInstanceId = config.getRdsDBInstanceId();   
+        String action = config.getRdsAction();  
+        String dbName = config.getRdsDBName();
+        
+        HttpResponse response = postRequest(rdsUrl, "Action:"+action,
+            "DBInstanceId:"+dbInstanceId, "DBName:"+dbName, "StartTime:2018-01-01Z", 
+            "EndTime:2018-03-08Z");
 
-        String json;
+        RDSBean bean = new RDSBean();
         try {
-            json = EntityUtils.toString(response.getEntity());
+            String json = EntityUtils.toString(response.getEntity());
             System.out.println(json);
+            
+            JSONObject object = new JSONObject(json);
+            JSONObject items = (JSONObject) object.get("Items");
+            JSONArray jsonArray = items.getJSONArray("SQLSlowLog");
+            System.out.println(jsonArray);
+            
+            List<RDSItemDetail> details = new ArrayList<RDSItemDetail>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                RDSItemDetail vo = new RDSItemDetail();
+                JSONObject obj = jsonArray.getJSONObject(i);
+                vo.setHostAddress((String)obj.get("hostAddress"));
+                vo.setQueryTimes((String)obj.get("queryTimes"));
+                vo.setLockTimes((String)obj.get("lockTimes"));
+                vo.setSqlText((String)obj.get("sqlText"));
+                details.add(vo);
+            }
+            
+            bean.setRdsShowCount((Integer)object.get("TotalRecordCount"));
+            bean.setDbInstanceId(dbInstanceId);
+            bean.setDbName(dbName);
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -134,6 +159,34 @@ public class RDSService {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
+        
+        return bean;
+    }
+    
+    public static void main(String[] args) {
+//        // 查看慢日志统计
+//        HttpResponse response = postRequest("http://rds.cpct.com.cn", "Action:DescribeSlowLogs",
+//            "DBInstanceId:rds2439awoqx0363m0ib", "DBName:test", "StartTime:2018-01-01Z", 
+//            "EndTime:2018-03-08Z");
+//        // 查看慢日志明细
+//        // HttpResponse response=postRequest("http://rds.cpct.com.cn",
+//        // "Action:DescribeSlowLogRecords",
+//        // "DBInstanceId:rds2439awoqx0363m0ib",
+//        // "StartTime:2018-03-01T12:00Z",
+//        // "EndTime:2018-03-01T13:00Z");
+//
+//        String json;
+//        try {
+//            json = EntityUtils.toString(response.getEntity());
+//            System.out.println(json);
+//        } catch (ParseException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+//    }
+      
     }
 }

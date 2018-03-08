@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class MQEndpoint extends Collector {
     
     @Autowired
-    private MQService mqService;
+    private MQService mqSrv;
     
     @Override
     public List<MetricFamilySamples> collect() {
@@ -27,7 +27,7 @@ public class MQEndpoint extends Collector {
             "mq_topic_metrics_diff_total", Arrays.asList("topic_name"));
 
         // 获取consumerID订阅的所有topic的堆积数据。
-        List<MQBean> mqDetails = mqService.getTotalDiff();
+        List<MQBean> mqDetails = mqSrv.getTotalDiff();
 
         for (int i = 0; i < mqDetails.size(); i++) {
             MQBean value = mqDetails.get(i);
