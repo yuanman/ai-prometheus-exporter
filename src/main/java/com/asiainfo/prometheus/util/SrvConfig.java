@@ -5,18 +5,18 @@ import org.springframework.stereotype.Component;
 
 @ConfigurationProperties(prefix = "srv")
 @Component
-public class ServiceConfig {
+public class SrvConfig {
     private String accesskey;
     private String securityKey;
-    
-    //for mq
+
+    // for mq
     private String mqPlatform;
     private String mqUrl;
     private String mqRegionId;
     private String mqConsumerId;
     private String mqTopicDetail;
 
-    //for rds
+    // for rds
     private String rdsFormat;
     private String rdsVersion;
     private String rdsSignatureMethod;
@@ -25,96 +25,199 @@ public class ServiceConfig {
     private String rdsAction;
     private String rdsDBInstanceId;
     private String rdsDBName;
-    
+
+    // for slb
+    private String slbFormat;
+    private String slbVersion;
+    private String slbSignatureMethod;
+    private String slbSignatureVersion;
+    private String slbUrl;
+    private String slbAction;
+    private String slbLoadBalancerId;
+    private String slbListenerPort;
+
     public String getAccesskey() {
         return accesskey;
     }
+
     public void setAccesskey(String accesskey) {
         this.accesskey = accesskey;
     }
+
     public String getSecurityKey() {
         return securityKey;
     }
+
     public void setSecurityKey(String securityKey) {
         this.securityKey = securityKey;
     }
+
     public String getMqPlatform() {
         return mqPlatform;
     }
+
     public void setMqPlatform(String mqPlatform) {
         this.mqPlatform = mqPlatform;
     }
+
     public String getMqUrl() {
         return mqUrl;
     }
+
     public void setMqUrl(String mqUrl) {
         this.mqUrl = mqUrl;
     }
+
     public String getMqRegionId() {
         return mqRegionId;
     }
+
     public void setMqRegionId(String mqRegionId) {
         this.mqRegionId = mqRegionId;
     }
+
     public String getMqConsumerId() {
         return mqConsumerId;
     }
+
     public void setMqConsumerId(String mqConsumerId) {
         this.mqConsumerId = mqConsumerId;
     }
+
     public String getMqTopicDetail() {
         return mqTopicDetail;
     }
+
     public void setMqTopicDetail(String mqTopicDetail) {
         this.mqTopicDetail = mqTopicDetail;
     }
+
     public String getRdsFormat() {
         return rdsFormat;
     }
+
     public void setRdsFormat(String rdsFormat) {
         this.rdsFormat = rdsFormat;
     }
+
     public String getRdsVersion() {
         return rdsVersion;
     }
+
     public void setRdsVersion(String rdsVersion) {
         this.rdsVersion = rdsVersion;
     }
+
     public String getRdsSignatureMethod() {
         return rdsSignatureMethod;
     }
+
     public void setRdsSignatureMethod(String rdsSignatureMethod) {
         this.rdsSignatureMethod = rdsSignatureMethod;
     }
+
     public String getRdsSignatureVersion() {
         return rdsSignatureVersion;
     }
+
     public void setRdsSignatureVersion(String rdsSignatureVersion) {
         this.rdsSignatureVersion = rdsSignatureVersion;
     }
+
     public String getRdsUrl() {
         return rdsUrl;
     }
+
     public void setRdsUrl(String rdsUrl) {
         this.rdsUrl = rdsUrl;
     }
+
     public String getRdsAction() {
         return rdsAction;
     }
+
     public void setRdsAction(String rdsAction) {
         this.rdsAction = rdsAction;
     }
+
     public String getRdsDBInstanceId() {
         return rdsDBInstanceId;
     }
+
     public void setRdsDBInstanceId(String rdsDBInstanceId) {
         this.rdsDBInstanceId = rdsDBInstanceId;
     }
+
     public String getRdsDBName() {
         return rdsDBName;
     }
+
     public void setRdsDBName(String rdsDBName) {
         this.rdsDBName = rdsDBName;
     }
-        
+
+    public String getSlbFormat() {
+        return slbFormat;
+    }
+
+    public void setSlbFormat(String slbFormat) {
+        this.slbFormat = slbFormat;
+    }
+
+    public String getSlbVersion() {
+        return slbVersion;
+    }
+
+    public void setSlbVersion(String slbVersion) {
+        this.slbVersion = slbVersion;
+    }
+
+    public String getSlbSignatureMethod() {
+        return slbSignatureMethod;
+    }
+
+    public void setSlbSignatureMethod(String slbSignatureMethod) {
+        this.slbSignatureMethod = slbSignatureMethod;
+    }
+
+    public String getSlbSignatureVersion() {
+        return slbSignatureVersion;
+    }
+
+    public void setSlbSignatureVersion(String slbSignatureVersion) {
+        this.slbSignatureVersion = slbSignatureVersion;
+    }
+
+    public String getSlbUrl() {
+        return slbUrl;
+    }
+
+    public void setSlbUrl(String slbUrl) {
+        this.slbUrl = slbUrl;
+    }
+
+    public String getSlbAction() {
+        return slbAction;
+    }
+
+    public void setSlbAction(String slbAction) {
+        this.slbAction = slbAction;
+    }
+
+    public String getSlbLoadBalancerId() {
+        return slbLoadBalancerId;
+    }
+
+    public void setSlbLoadBalancerId(String slbLoadBalancerId) {
+        this.slbLoadBalancerId = slbLoadBalancerId;
+    }
+
+    public String getSlbListenerPort() {
+        return slbListenerPort;
+    }
+
+    public void setSlbListenerPort(String slbListenerPort) {
+        this.slbListenerPort = slbListenerPort;
+    }
+
 }

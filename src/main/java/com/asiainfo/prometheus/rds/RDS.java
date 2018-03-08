@@ -13,7 +13,7 @@ import java.util.TreeMap;
 import com.aliyun.openservices.ons.api.impl.authority.OnsAuthSigner;
 import com.asiainfo.prometheus.util.CommonUtil;
 import com.asiainfo.prometheus.util.HttpClientFactory;
-import com.asiainfo.prometheus.util.ServiceConfig;
+import com.asiainfo.prometheus.util.SrvConfig;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -32,7 +32,7 @@ import org.springframework.stereotype.Component;
 public class RDS {
     
     @Autowired
-    private ServiceConfig config;
+    private SrvConfig config;
     
     public HttpResponse postRequest(String url, String... args) {
         String accesskey = config.getAccesskey(); //2SbUQlH7FJKyur9V
