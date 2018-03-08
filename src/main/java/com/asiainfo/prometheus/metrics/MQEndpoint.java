@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.asiainfo.prometheus.mq.MQBean;
-import com.asiainfo.prometheus.mq.MQService;
+import com.asiainfo.prometheus.mq.MQ;
 import io.prometheus.client.Collector;
 import io.prometheus.client.GaugeMetricFamily;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class MQEndpoint extends Collector {
     
     @Autowired
-    private MQService mqSrv;
+    private MQ mqSrv;
     
     @Override
     public List<MetricFamilySamples> collect() {

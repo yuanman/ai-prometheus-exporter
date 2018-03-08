@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.asiainfo.prometheus.rds.RDSBean;
-import com.asiainfo.prometheus.rds.RDSService;
+import com.asiainfo.prometheus.rds.RDS;
 import io.prometheus.client.Collector;
 import io.prometheus.client.GaugeMetricFamily;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class RDSEndpoint extends Collector {
 
     @Autowired
-    private RDSService rdsSrv;
+    private RDS rdsSrv;
     
     public List<MetricFamilySamples> collect() {
         RDSBean bean = rdsSrv.getSlowCount();

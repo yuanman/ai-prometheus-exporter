@@ -1,6 +1,5 @@
 package com.asiainfo.prometheus.rds;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -12,6 +11,7 @@ import java.util.TimeZone;
 import java.util.TreeMap;
 
 import com.aliyun.openservices.ons.api.impl.authority.OnsAuthSigner;
+import com.asiainfo.prometheus.util.CommonUtil;
 import com.asiainfo.prometheus.util.HttpClientFactory;
 import com.asiainfo.prometheus.util.ServiceConfig;
 import org.apache.http.HttpEntity;
@@ -29,7 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RDSService {
+public class RDS {
     
     @Autowired
     private ServiceConfig config;
@@ -65,7 +65,7 @@ public class RDSService {
             paras.put(kv[0], kv[1]);
         }
 
-        String origin = RDSService.combineContent(paras);
+        String origin = RDS.combineContent(paras);
         String signature = OnsAuthSigner.calSignature(origin, securityKey + "&");
         paras.put("Signature", signature);
 
@@ -123,13 +123,13 @@ public class RDSService {
         String dbInstanceId = config.getRdsDBInstanceId();   
         String action = config.getRdsAction();  
         String dbName = config.getRdsDBName();
-        
-        HttpResponse response = postRequest(rdsUrl, "Action:"+action,
-            "DBInstanceId:"+dbInstanceId, "DBName:"+dbName, "StartTime:2018-01-01Z", 
-            "EndTime:2018-03-08Z");
 
         RDSBean bean = new RDSBean();
         try {
+            HttpResponse response =
+                postRequest(rdsUrl, "Action:" + action, "DBInstanceId:" + dbInstanceId, "DBName:" + dbName,
+                    "StartTime:" + CommonUtil.getBeforeDay() + "Z", "EndTime:" + CommonUtil.getCurrentDay() + "Z");
+            
             String json = EntityUtils.toString(response.getEntity());
             System.out.println(json);
             
@@ -153,10 +153,8 @@ public class RDSService {
             bean.setDbInstanceId(dbInstanceId);
             bean.setDbName(dbName);
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
+        } catch (Exception e) {
             e.printStackTrace();
         }
         

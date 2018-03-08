@@ -22,7 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MQService {
+public class MQ {
     
     @Autowired
     private ServiceConfig config;
@@ -42,7 +42,7 @@ public class MQService {
             paras.put(kv[0], kv[1]);
         }
 
-        String origin = MQService.combineContent(paras);
+        String origin = MQ.combineContent(paras);
         String signature = OnsAuthSigner.calSignature(origin, securityKey);
         paras.put("_signature", signature);
 
