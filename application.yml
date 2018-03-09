@@ -23,6 +23,7 @@ srv:
   rdsAction: DescribeSlowLogs
   rdsDBInstanceId: rds2439awoqx0363m0ib
   rdsDBName: test
+  
   slbFormat: JSON
   slbVersion: 2014-05-15
   slbSignatureMethod: HMAC-SHA1
@@ -31,4 +32,13 @@ srv:
   slbAction: DescribeHealthStatus
   slbLoadBalancerId: 161fa5394b3-cn-beijing-zgyz-d01
   slbListenerPort: 80
+  
+  redisFormat: JSON
+  redisVersion: 2015-01-01
+  redisSignatureMethod: HMAC-SHA1
+  redisslbSignatureVersion: 1.0
+  redisUrl: http://kvstore.cpct.com.cn
+  redisAction: DescribeHistoryMonitorValues
+  redisInstanceId: 74314bb1fe9c4ecc
+  redisIntervalForHistory: 01m
   

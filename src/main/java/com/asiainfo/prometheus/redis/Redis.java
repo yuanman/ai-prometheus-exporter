@@ -28,12 +28,12 @@ public class Redis {
         Map<String, String> paras = new TreeMap<>();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         df.setTimeZone(TimeZone.getTimeZone("GMT"));
+        paras.put("AccessKeyId", "2SbUQlH7FJKyur9V");
         paras.put("Format", "JSON");
         paras.put("Version", "2015-01-01");
         paras.put("SignatureMethod", "HMAC-SHA1");
         paras.put("SignatureNonce", String.valueOf(System.currentTimeMillis()));
         paras.put("SignatureVersion", "1.0");
-        paras.put("AccessKeyId", "2SbUQlH7FJKyur9V");
         paras.put("Timestamp", df.format(new Date()));
 
         for (String arg : args) {
@@ -114,6 +114,5 @@ public class Redis {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
     }
 }
