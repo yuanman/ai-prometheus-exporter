@@ -148,7 +148,7 @@ public class RDS {
                 vo.setSqlText((String)obj.get("sqlText"));
                 details.add(vo);
             }
-            
+            bean.setDetailList(details);
             bean.setRdsShowCount((Integer)object.get("TotalRecordCount"));
             bean.setDbInstanceId(dbInstanceId);
             bean.setDbName(dbName);

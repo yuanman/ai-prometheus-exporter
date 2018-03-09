@@ -36,6 +36,25 @@ public class SrvConfig {
     private String slbLoadBalancerId;
     private String slbListenerPort;
 
+    // for redis
+    private String redisFormat;
+    private String redisVersion;
+    private String redisSignatureMethod;
+    private String redisSignatureVersion;
+    private String redisUrl;
+    private String redisDescribeInstances;
+    public String getRedisDescribeInstances() {
+        return redisDescribeInstances;
+    }
+
+    public void setRedisDescribeInstances(String redisDescribeInstances) {
+        this.redisDescribeInstances = redisDescribeInstances;
+    }
+
+    private String redisDescribeHistoryMonitorValues;
+    private String redisInstanceId;
+    private String redisIntervalForHistory;
+
     public String getAccesskey() {
         return accesskey;
     }
@@ -218,6 +237,70 @@ public class SrvConfig {
 
     public void setSlbListenerPort(String slbListenerPort) {
         this.slbListenerPort = slbListenerPort;
+    }
+
+    public String getRedisFormat() {
+        return redisFormat;
+    }
+
+    public void setRedisFormat(String redisFormat) {
+        this.redisFormat = redisFormat;
+    }
+
+    public String getRedisVersion() {
+        return redisVersion;
+    }
+
+    public void setRedisVersion(String redisVersion) {
+        this.redisVersion = redisVersion;
+    }
+
+    public String getRedisSignatureMethod() {
+        return redisSignatureMethod;
+    }
+
+    public void setRedisSignatureMethod(String redisSignatureMethod) {
+        this.redisSignatureMethod = redisSignatureMethod;
+    }
+
+    public String getRedisSignatureVersion() {
+        return redisSignatureVersion;
+    }
+
+    public void setRedisSignatureVersion(String redisSignatureVersion) {
+        this.redisSignatureVersion = redisSignatureVersion;
+    }
+
+    public String getRedisUrl() {
+        return redisUrl;
+    }
+
+    public void setRedisUrl(String redisUrl) {
+        this.redisUrl = redisUrl;
+    }
+
+    public String getRedisDescribeHistoryMonitorValues() {
+        return redisDescribeHistoryMonitorValues;
+    }
+
+    public void setRedisDescribeHistoryMonitorValues(String redisDescribeHistoryMonitorValues) {
+        this.redisDescribeHistoryMonitorValues = redisDescribeHistoryMonitorValues;
+    }
+
+    public String getRedisInstanceId() {
+        return redisInstanceId;
+    }
+
+    public void setRedisInstanceId(String redisInstanceId) {
+        this.redisInstanceId = redisInstanceId;
+    }
+
+    public String getRedisIntervalForHistory() {
+        return redisIntervalForHistory;
+    }
+
+    public void setRedisIntervalForHistory(String redisIntervalForHistory) {
+        this.redisIntervalForHistory = redisIntervalForHistory;
     }
 
 }

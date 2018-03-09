@@ -38,7 +38,8 @@ srv:
   redisSignatureMethod: HMAC-SHA1
   redisslbSignatureVersion: 1.0
   redisUrl: http://kvstore.cpct.com.cn
-  redisAction: DescribeHistoryMonitorValues
+  redisDescribeInstances: DescribeInstances
+  redisDescribeHistoryMonitorValues: DescribeHistoryMonitorValues
   redisInstanceId: 74314bb1fe9c4ecc
   redisIntervalForHistory: 01m
   
