@@ -1,4 +1,4 @@
-package com.ai.prometheus.redis;
+package com.ai.test;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -15,8 +15,9 @@ import java.util.TreeMap;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 
+import com.ai.prometheus.redis.Redis;
+import com.ai.prometheus.redis.RedisBean;
 import com.ai.prometheus.util.HttpClientFactory;
-import com.ai.prometheus.util.SrvConfig;
 import com.aliyun.openservices.ons.api.impl.authority.OnsAuthSigner;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -26,30 +27,19 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 
-public class Redis {
+public class RedisTest {
 
-    @Autowired
-    private SrvConfig config;
-
-    public HttpResponse postRequest(String url, String... args) {
-        String accesskey = config.getAccesskey(); // 2SbUQlH7FJKyur9V
-        String securityKey = config.getSecurityKey(); // WGoQpjLNgTA4VwrHNQBcqe0zDbXZti
-        String format = config.getRdsFormat(); // JSON
-        String version = config.getRdsVersion(); // 2015-01-01
-        String signatureMethod = config.getRdsSignatureMethod(); // HMAC-SHA1
-        String signatureVersion = config.getRdsSignatureVersion(); // 1.0
-
+    public static HttpResponse postRequest(String url, String... args) {
         Map<String, String> paras = new TreeMap<>();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         df.setTimeZone(TimeZone.getTimeZone("GMT"));
-        paras.put("AccessKeyId", accesskey);
-        paras.put("Format", format);
-        paras.put("Version", version);
-        paras.put("SignatureMethod", signatureMethod);
+        paras.put("Format", "JSON");
+        paras.put("Version", "2015-01-01");
+        paras.put("SignatureMethod", "HMAC-SHA1");
         paras.put("SignatureNonce", String.valueOf(System.currentTimeMillis()));
-        paras.put("SignatureVersion", signatureVersion);
+        paras.put("SignatureVersion", "1.0");
+        paras.put("AccessKeyId", "2SbUQlH7FJKyur9V");
         paras.put("Timestamp", df.format(new Date()));
 
         for (String arg : args) {
@@ -58,7 +48,7 @@ public class Redis {
         }
 
         String origin = Redis.combineContent(paras);
-        String signature = OnsAuthSigner.calSignature(origin, securityKey + "&");
+        String signature = OnsAuthSigner.calSignature(origin, "WGoQpjLNgTA4VwrHNQBcqe0zDbXZti" + "&");
         paras.put("Signature", signature);
 
         List<NameValuePair> data = new ArrayList<>();
@@ -153,18 +143,17 @@ public class Redis {
     }
 
     public RedisBean getRedisMetrics() {
-        String redisUrl = config.getRedisUrl();
-        String instanceId = "InstanceId:" + config.getRedisInstanceId();
-        String instanceIds = "InstanceIds:" + config.getRedisInstanceId();
-        String actionDescribeInstances = "Action:" + config.getRedisDescribeInstances();
-        String actionDescribeHistoryMonitorValues = "Action:" + config.getRedisDescribeHistoryMonitorValues();
-        String intervalForHistory = "IntervalForHistory:" + config.getRedisIntervalForHistory();
+        String redisUrl = "http://kvstore.cpct.com.cn";
+        String instanceId = "InstanceId:74314bb1fe9c4ecc";
+        String instanceIds = "InstanceIds:74314bb1fe9c4ecc";
+        String actionDescribeInstances = "Action:DescribeInstances";
+        String actionDescribeHistoryMonitorValues = "Action:DescribeHistoryMonitorValues";
+        String intervalForHistory = "IntervalForHistory:01m";
 
         // 1.first to get redis capacity.
         HttpResponse response_1 = postRequest(redisUrl, actionDescribeInstances, instanceIds);
 
         RedisBean bean = new RedisBean();
-        bean.setInstanceId(config.getRedisInstanceId());
         try {
             String json_1 = EntityUtils.toString(response_1.getEntity());
             System.out.println(json_1);
@@ -178,7 +167,7 @@ public class Redis {
         // 2.get usedMemory.
         // 查看redis监控值,注意时区为0时区，时间要减8:00
         HttpResponse response = postRequest(redisUrl, actionDescribeHistoryMonitorValues, instanceId,
-            "StartTime:2018-03-08T08:00:00Z", "EndTime:2099-03-08T11:01:00Z", intervalForHistory);
+            "StartTime:2018-03-08T08:00:00Z", "EndTime:2018-03-08T08:01:00Z", intervalForHistory);
         try {
             String json = EntityUtils.toString(response.getEntity());
             System.out.println(json);
@@ -194,15 +183,15 @@ public class Redis {
     }
 
     public static void main(String[] args) {
-        // // 查看redis监控值,注意时区为0时区，时间要减8:00
-        // HttpResponse response = postRequest("http://kvstore.cpct.com.cn",
-        // "Action:DescribeHistoryMonitorValues",
-        // "InstanceId:74314bb1fe9c4ecc", "StartTime:2018-03-08T08:00:00Z",
-        // "EndTime:2099-03-08T11:01:00Z",
-        // "IntervalForHistory:01m");
-        //
-        // // 查看redis实例的总容量等信息
-        // HttpResponse response_1 =
+        RedisTest srv = new RedisTest();
+        RedisBean bean = srv.getRedisMetrics();
+
+        System.out.println("++++++++ instanceId:" + bean.getInstanceId());
+        System.out.println("++++++++ capacity:" + bean.getCapacity());
+        System.out.println("++++++++ usedMemcache:" + bean.getUsedMemCache());
+
+        // // 查看redis实例信息
+        // HttpResponse response =
         // postRequest("http://kvstore.cpct.com.cn", "Action:DescribeInstances",
         // "InstanceIds:74314bb1fe9c4ecc");
         //
@@ -210,6 +199,18 @@ public class Redis {
         // try {
         // json = EntityUtils.toString(response.getEntity());
         // System.out.println(json);
+        // org.json.JSONObject object = new org.json.JSONObject(json);
+        // org.json.JSONObject instances =
+        // (org.json.JSONObject)object.get("Instances");
+        // org.json.JSONArray kvStoreInstanceArray =
+        // instances.getJSONArray("KVStoreInstance");
+        // System.out.println(kvStoreInstanceArray);
+        //
+        // if (kvStoreInstanceArray.length() > 0) {
+        // org.json.JSONObject obj = kvStoreInstanceArray.getJSONObject(0);
+        // obj.get("Capacity");
+        // System.out.println(obj.get("Capacity"));
+        // }
         // } catch (ParseException e) {
         // // TODO Auto-generated catch block
         // e.printStackTrace();
@@ -217,5 +218,42 @@ public class Redis {
         // // TODO Auto-generated catch block
         // e.printStackTrace();
         // }
+
+        // 查看redis监控值,注意时区为0时区，时间要减8:00
+        // HttpResponse response = postRequest("http://kvstore.cpct.com.cn",
+        // "Action:DescribeHistoryMonitorValues",
+        // "InstanceId:74314bb1fe9c4ecc", "StartTime:2018-03-08T08:00:00Z",
+        // "EndTime:2018-03-08T08:02:00Z",
+        // "IntervalForHistory:01m");
+        // String json;
+        // try {
+        // json = EntityUtils.toString(response.getEntity());
+        // System.out.println(json);
+        //
+        // org.json.JSONObject object = new org.json.JSONObject(json);
+        // String monitorHistory = object.getString("MonitorHistory");
+        // System.out.println(monitorHistory);
+        //
+        // com.alibaba.fastjson.JSONArray jarr =
+        // com.alibaba.fastjson.JSONArray.parseArray("["+monitorHistory+"]");
+        // for (Iterator<Object> iterator = jarr.iterator();
+        // iterator.hasNext();) {
+        // com.alibaba.fastjson.JSONObject job =
+        // (com.alibaba.fastjson.JSONObject) iterator.next();
+        // Set<String> s = job.keySet();
+        // for (String string : s) {
+        // System.out.println(job.get(string));
+        // JSONObject temp = JSONObject.parseObject(job.get(string) + "");
+        // System.out.println(temp.get("UsedMemory"));
+        // }
+        // }
+        // } catch (ParseException e) {
+        // // TODO Auto-generated catch block
+        // e.printStackTrace();
+        // } catch (IOException e) {
+        // // TODO Auto-generated catch block
+        // e.printStackTrace();
+        // }
+
     }
 }
