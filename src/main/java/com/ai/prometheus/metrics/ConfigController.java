@@ -1,6 +1,6 @@
-package com.asiainfo.prometheus.metrics;
+package com.ai.prometheus.metrics;
 
-import com.asiainfo.prometheus.util.SrvConfig;
+import com.ai.prometheus.util.SrvConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

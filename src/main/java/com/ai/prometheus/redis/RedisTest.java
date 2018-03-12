@@ -1,4 +1,4 @@
-package com.asiainfo.prometheus.redis;
+package com.ai.prometheus.redis;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -14,8 +14,6 @@ import java.util.TimeZone;
 import java.util.TreeMap;
 
 import com.aliyun.openservices.ons.api.impl.authority.OnsAuthSigner;
-import com.asiainfo.prometheus.rds.RDSItemDetail;
-import com.asiainfo.prometheus.util.HttpClientFactory;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -26,6 +24,10 @@ import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import com.alibaba.fastjson.JSONObject;
+
+import com.ai.prometheus.rds.RDSItemDetail;
+import com.ai.prometheus.util.HttpClientFactory;
+
 import com.alibaba.fastjson.JSONArray;
 
 public class RedisTest {

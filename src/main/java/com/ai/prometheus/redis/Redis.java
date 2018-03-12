@@ -1,4 +1,4 @@
-package com.asiainfo.prometheus.redis;
+package com.ai.prometheus.redis;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -15,9 +15,9 @@ import java.util.TreeMap;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 
+import com.ai.prometheus.util.HttpClientFactory;
+import com.ai.prometheus.util.SrvConfig;
 import com.aliyun.openservices.ons.api.impl.authority.OnsAuthSigner;
-import com.asiainfo.prometheus.util.HttpClientFactory;
-import com.asiainfo.prometheus.util.SrvConfig;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;

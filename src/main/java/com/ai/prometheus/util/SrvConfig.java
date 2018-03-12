@@ -1,4 +1,4 @@
-package com.asiainfo.prometheus.util;
+package com.ai.prometheus.util;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

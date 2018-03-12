@@ -1,11 +1,11 @@
-package com.asiainfo.prometheus.metrics;
+package com.ai.prometheus.metrics;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.asiainfo.prometheus.slb.SLB;
-import com.asiainfo.prometheus.slb.SLBBean;
+import com.ai.prometheus.slb.SLB;
+import com.ai.prometheus.slb.SLBBean;
 import io.prometheus.client.Collector;
 import io.prometheus.client.GaugeMetricFamily;
 import org.springframework.beans.factory.annotation.Autowired;

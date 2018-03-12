@@ -1,4 +1,4 @@
-package com.asiainfo.prometheus;
+package com.ai.prometheus;
 
 import io.prometheus.client.spring.boot.EnablePrometheusEndpoint;
 import io.prometheus.client.spring.boot.EnableSpringBootMetricsCollector;

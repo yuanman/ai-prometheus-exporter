@@ -1,11 +1,11 @@
-package com.asiainfo.prometheus.metrics;
+package com.ai.prometheus.metrics;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.asiainfo.prometheus.rds.RDSBean;
-import com.asiainfo.prometheus.rds.RDS;
+import com.ai.prometheus.rds.RDS;
+import com.ai.prometheus.rds.RDSBean;
 import io.prometheus.client.Collector;
 import io.prometheus.client.GaugeMetricFamily;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.asiainfo.prometheus.util;
+package com.ai.prometheus.util;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

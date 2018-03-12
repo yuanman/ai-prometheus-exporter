@@ -1,13 +1,13 @@
-package com.asiainfo.prometheus.mq;
+package com.ai.prometheus.mq;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.ai.prometheus.util.HttpClientFactory;
+import com.ai.prometheus.util.SrvConfig;
 import com.aliyun.openservices.ons.api.impl.authority.OnsAuthSigner;
-import com.asiainfo.prometheus.util.HttpClientFactory;
-import com.asiainfo.prometheus.util.SrvConfig;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;

@@ -1,4 +1,4 @@
-package com.asiainfo.prometheus.rds;
+package com.ai.prometheus.rds;
 
 public class RDSItemDetail {
     public String hostAddress;

@@ -1,4 +1,4 @@
-package com.asiainfo.prometheus.slb;
+package com.ai.prometheus.slb;
 
 public class BackendServer {
     public String serverId;

@@ -1,4 +1,4 @@
-package com.asiainfo.prometheus.slb;
+package com.ai.prometheus.slb;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -10,9 +10,9 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.TreeMap;
 
+import com.ai.prometheus.util.HttpClientFactory;
+import com.ai.prometheus.util.SrvConfig;
 import com.aliyun.openservices.ons.api.impl.authority.OnsAuthSigner;
-import com.asiainfo.prometheus.util.HttpClientFactory;
-import com.asiainfo.prometheus.util.SrvConfig;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;

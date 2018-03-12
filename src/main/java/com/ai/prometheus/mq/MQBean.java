@@ -1,4 +1,4 @@
-package com.asiainfo.prometheus.mq;
+package com.ai.prometheus.mq;
 
 public class MQBean {
     String topic ;

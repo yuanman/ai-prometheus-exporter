@@ -1,4 +1,4 @@
-package com.asiainfo.prometheus.rds;
+package com.ai.prometheus.rds;
 
 import java.util.List;
 

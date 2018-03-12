@@ -1,4 +1,4 @@
-package com.asiainfo.prometheus.redis;
+package com.ai.prometheus.redis;
 
 public class RedisBean {
     public String instanceId;
