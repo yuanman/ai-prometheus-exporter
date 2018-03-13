@@ -49,8 +49,14 @@ srv:
       signaturemethod: HMAC-SHA1
       signatureversion: 1.0
       url: http://rds.cpct.com.cn
-    - format: XML
-      version: 2099-08-15
+      action: DescribeSlowLogs
+      dbinstanceid: rds2439awoqx0363m0ib
+      dbname: test
+    - format: JSON
+      version: 2014-08-15
       signaturemethod: HMAC-SHA1
-      signatureversion: 1.1
+      signatureversion: 1.0
       url: http://rds.cpct.com.cn
+      action: DescribeSlowLogs
+      dbinstanceid: rds2439awoqx0363m0ib
+      dbname: test

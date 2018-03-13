@@ -6,6 +6,9 @@ public class RdsConfig {
     private String signaturemethod;
     private String signatureversion;
     private String url;
+    private String action;
+    private String dbinstanceid;
+    private String dbname;
 
     public String getFormat() {
         return format;
@@ -45,6 +48,30 @@ public class RdsConfig {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    public String getDbinstanceid() {
+        return dbinstanceid;
+    }
+
+    public void setDbinstanceid(String dbinstanceid) {
+        this.dbinstanceid = dbinstanceid;
+    }
+
+    public String getDbname() {
+        return dbname;
+    }
+
+    public void setDbname(String dbname) {
+        this.dbname = dbname;
     }
 
 }

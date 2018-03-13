@@ -13,17 +13,6 @@ public class SrvConfig {
     private String accesskey;
     private String securityKey;
 
-    // for rdsList
-    private List<Map<String, Object>> rdsList = new ArrayList<>();
-
-    public List<Map<String, Object>> getRdsList() {
-        return rdsList;
-    }
-
-    public void setRdsList(List<Map<String, Object>> rdsList) {
-        this.rdsList = rdsList;
-    }
-
     // for mq
     private String mqPlatform;
     private String mqUrl;
@@ -59,6 +48,17 @@ public class SrvConfig {
     private String redisUrl;
     private String redisDescribeInstances;
 
+    // for rdsList
+    private List<Map<String, Object>> rdsList = new ArrayList<>();
+
+    public List<Map<String, Object>> getRdsList() {
+        return rdsList;
+    }
+
+    public void setRdsList(List<Map<String, Object>> rdsList) {
+        this.rdsList = rdsList;
+    }
+    
     public String getRedisDescribeInstances() {
         return redisDescribeInstances;
     }

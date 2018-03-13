@@ -32,11 +32,11 @@ public class ConfigController {
 
         List<RdsConfig> rdsList = beanUtils.ListMap2JavaBean(config.getRdsList(), RdsConfig.class);
         for(int i=0;i<rdsList.size();i++){
-            logger.debug("++++["+i+"]:" + rdsList.get(i).getFormat());
-            logger.debug("++++["+i+"]:" + rdsList.get(i).getSignaturemethod());
-            logger.debug("++++["+i+"]:" + rdsList.get(i).getSignatureversion());
-            logger.debug("++++["+i+"]:" + rdsList.get(i).getVersion());
-            logger.debug("++++["+i+"]:" + rdsList.get(i).getUrl());
+            logger.info("++++["+i+"]:" + rdsList.get(i).getFormat());
+            logger.info("++++["+i+"]:" + rdsList.get(i).getSignaturemethod());
+            logger.info("++++["+i+"]:" + rdsList.get(i).getSignatureversion());
+            logger.info("++++["+i+"]:" + rdsList.get(i).getVersion());
+            logger.info("++++["+i+"]:" + rdsList.get(i).getUrl());
         }
         
 //        for (Map<String, Object> m : config.getRdsList()) {
