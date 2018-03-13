@@ -18,14 +18,15 @@ public class SLBEndpoint extends Collector {
     private SLB slbSrv;
 
     public List<MetricFamilySamples> collect() {
-        SLBBean bean = slbSrv.getHealthStatus();
         List<MetricFamilySamples> mfs = new ArrayList<MetricFamilySamples>();
         GaugeMetricFamily metricFamily = new GaugeMetricFamily("slb_metric_server_health_status",
             "slb_metric_server_health_status", Collections.singletonList("loadBalancerId"));
 
-        // metricFamily.addMetric(Collections.singletonList("instance-111"),
-        // NANOSECONDS_PER_SECOND);
-        metricFamily.addMetric(Collections.singletonList(bean.getLoadBalancerId()), bean.slbStatusCode);
+        List<SLBBean>  list = slbSrv.getHealthStatus();
+        for (SLBBean bean : list) {
+            metricFamily.addMetric(Collections.singletonList(bean.getLoadBalancerId()), bean.slbStatusCode);
+        }
+        
         mfs.add(metricFamily);
         return mfs;
     }

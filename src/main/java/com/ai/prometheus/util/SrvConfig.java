@@ -59,6 +59,18 @@ public class SrvConfig {
         this.rdsList = rdsList;
     }
     
+    // for slbList
+    private List<Map<String, Object>> slbList = new ArrayList<>();
+    
+    
+    public List<Map<String, Object>> getSlbList() {
+        return slbList;
+    }
+
+    public void setSlbList(List<Map<String, Object>> slbList) {
+        this.slbList = slbList;
+    }
+
     public String getRedisDescribeInstances() {
         return redisDescribeInstances;
     }

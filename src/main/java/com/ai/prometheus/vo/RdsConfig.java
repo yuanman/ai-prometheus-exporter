@@ -1,4 +1,4 @@
-package com.ai.prometheus.util;
+package com.ai.prometheus.vo;
 
 public class RdsConfig {
     private String format;

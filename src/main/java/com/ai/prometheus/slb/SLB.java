@@ -10,18 +10,20 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.TreeMap;
 
+import com.ai.prometheus.util.BeanUtils;
 import com.ai.prometheus.util.HttpClientFactory;
 import com.ai.prometheus.util.SrvConfig;
+import com.ai.prometheus.vo.SlbConfig;
 import com.aliyun.openservices.ons.api.impl.authority.OnsAuthSigner;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.ParseException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,23 +31,23 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SLB {
+    private Logger logger = Logger.getLogger(SLB.class);
 
     final static int SLB_STATUS_CODE_NORMAL = 0;
     final static int SLB_STATUS_CODE_ABNORMAL = 1;
-    
+
     @Autowired
     private SrvConfig config;
 
-    public HttpResponse postRequest(String url, String... args) {
-        String accesskey = config.getAccesskey(); // 2SbUQlH7FJKyur9V
+    public HttpResponse postRequest(SlbConfig slb, String url, String... args) {
+        String accesskey = config.getAccesskey();     // 2SbUQlH7FJKyur9V
         String securityKey = config.getSecurityKey(); // WGoQpjLNgTA4VwrHNQBcqe0zDbXZti
-        
-        
-        String format = config.getRdsFormat(); // JSON
-        String version = config.getRdsVersion(); // 2014-05-15
-        String signatureMethod = config.getRdsSignatureMethod(); // HMAC-SHA1
-        String signatureVersion = config.getRdsSignatureVersion(); // 1.0
 
+        String format = slb.getFormat();  // JSON
+        String version = slb.getVersion(); // 2014-05-15
+        String signatureMethod = slb.getSignaturemethod();   // HMAC-SHA1
+        String signatureVersion = slb.getSignatureversion(); // 1.0
+        
         Map<String, String> paras = new TreeMap<>();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         df.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -116,27 +118,44 @@ public class SLB {
      * 
      * @return
      */
-    public SLBBean getHealthStatus() {
-        String slbUrl = config.getRdsUrl();
-        String action = "Action:" + config.getSlbAction();
-        String loadBalancerId = "LoadBalancerId:" + config.getSlbLoadBalancerId();
-        String listenPort = "ListenerPort:" + config.getSlbListenerPort();
-        HttpResponse response = postRequest(slbUrl, action, loadBalancerId, listenPort);
+    public List<SLBBean> getHealthStatus() {
+        List<SLBBean> rs = new ArrayList<SLBBean>();
+        BeanUtils<SlbConfig> beanUtils = new BeanUtils<SlbConfig>();
 
-        SLBBean bean = new SLBBean();
-        bean.setListenerPort(listenPort);
-        bean.setLoadBalancerId(loadBalancerId);
-        bean.setSlbStatusCode(SLB_STATUS_CODE_NORMAL);
         try {
-            String json = EntityUtils.toString(response.getEntity());
-            parse(bean, json);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
+            List<SlbConfig> slbList = beanUtils.ListMap2JavaBean(config.getSlbList(), SlbConfig.class);
+
+            /** 根据配置文件中rds，请求获取rds监控数据 **/
+            for (int i = 0; i < slbList.size(); i++) {
+                SlbConfig slb = slbList.get(i);
+
+                String slbUrl = slb.getUrl();
+                String action = "Action:" + slb.getAction();
+                String loadBalancerId = "LoadBalancerId:" + slb.getLoadbalancerid();
+                String listenPort = "ListenerPort:" + slb.getListenerport();
+
+                HttpResponse response = postRequest(slb, slbUrl, action, loadBalancerId, listenPort);
+
+                SLBBean bean = new SLBBean();
+                bean.setListenerPort(listenPort);
+                bean.setLoadBalancerId(loadBalancerId);
+                bean.setSlbStatusCode(SLB_STATUS_CODE_NORMAL);
+                try {
+                    String json = EntityUtils.toString(response.getEntity());
+                    parse(bean, json);
+                } catch (Exception ex) {
+                    logger.error(ex.getMessage());
+                    ex.printStackTrace();
+                }
+
+                rs.add(bean);
+            }
+        } catch (Exception ex) {
+            logger.error(ex.getMessage());
+            ex.printStackTrace();
         }
 
-        return bean;
+        return rs;
     }
 
     /**
@@ -148,17 +167,17 @@ public class SLB {
      * @throws Exception
      */
     public SLBBean parse(SLBBean bean, String json) throws Exception {
-        System.out.println(json);
+        logger.info(json);
         JSONObject object = new JSONObject(json);
         JSONObject backendServers = (JSONObject)object.get("BackendServers");
         JSONArray jsonArray = backendServers.getJSONArray("BackendServer");
-        System.out.println(jsonArray);
+        logger.info(jsonArray);
 
         List<BackendServer> details = new ArrayList<BackendServer>();
         for (int i = 0; i < jsonArray.length(); i++) {
             BackendServer vo = new BackendServer();
             JSONObject obj = jsonArray.getJSONObject(i);
-            if("abnormal".equals((String)obj.get("ServerHealthStatus"))) {
+            if ("abnormal".equals((String)obj.get("ServerHealthStatus"))) {
                 bean.setSlbStatusCode(SLB_STATUS_CODE_ABNORMAL);
             }
             vo.setServerId((String)obj.get("ServerId"));
@@ -167,6 +186,7 @@ public class SLB {
         }
 
         bean.setServerList(details);
+        
         return bean;
     }
 

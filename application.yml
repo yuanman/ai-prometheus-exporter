@@ -15,23 +15,6 @@ srv:
   mqRegionId: shihua
   mqConsumerId: CID_CRM_TEST_1206
   mqTopicDetail: true
-  rdsFormat: JSON
-  rdsVersion: 2014-08-15
-  rdsSignatureMethod: HMAC-SHA1
-  rdsSignatureVersion: 1.0
-  rdsUrl: http://rds.cpct.com.cn
-  rdsAction: DescribeSlowLogs
-  rdsDBInstanceId: rds2439awoqx0363m0ib
-  rdsDBName: test
-  ## slb配置
-  slbFormat: JSON
-  slbVersion: 2014-05-15
-  slbSignatureMethod: HMAC-SHA1
-  slbSignatureVersion: 1.0
-  slbUrl: http://slb.cpct.com.cn
-  slbAction: DescribeHealthStatus
-  slbLoadBalancerId: 161fa5394b3-cn-beijing-zgyz-d01
-  slbListenerPort: 80
   ## redis配置
   redisFormat: JSON
   redisVersion: 2015-01-01
@@ -42,6 +25,24 @@ srv:
   redisDescribeHistoryMonitorValues: DescribeHistoryMonitorValues
   redisInstanceId: 74314bb1fe9c4ecc
   redisIntervalForHistory: 01m
+  ## slb配置
+  slbList:
+    - format: JSON
+      version: 2014-05-15
+      signaturemethod: HMAC-SHA1
+      signatureversion: 1.0
+      url: http://slb.cpct.com.cn
+      action: DescribeHealthStatus
+      loadbalancerid: 161fa5394b3-cn-beijing-zgyz-d01
+      listenerport: 80
+    - format: JSON
+      version: 2014-05-15
+      signaturemethod: HMAC-SHA1
+      signatureversion: 1.0
+      url: http://slb.cpct.com.cn
+      action: DescribeHealthStatus
+      loadbalancerid: 161fa5394b3-cn-beijing-zgyz-d01
+      listenerport: 80      
   ## 多个配置
   rdsList:
     - format: JSON

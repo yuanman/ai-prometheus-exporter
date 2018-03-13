@@ -13,9 +13,13 @@ public class RegisterController {
     @Autowired
     private RDSEndpoint rdsExporter;
     
+    @Autowired
+    private SLBEndpoint slbExporter;
+    
     @RequestMapping("/register")
     public void rdsExporter() {
         mqExporter.register();
         rdsExporter.register();
+        slbExporter.register();
     }
 }
