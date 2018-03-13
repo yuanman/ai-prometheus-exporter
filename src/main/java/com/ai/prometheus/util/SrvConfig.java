@@ -1,5 +1,9 @@
 package com.ai.prometheus.util;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -8,6 +12,17 @@ import org.springframework.stereotype.Component;
 public class SrvConfig {
     private String accesskey;
     private String securityKey;
+
+    // for rdsList
+    private List<Map<String, Object>> rdsList = new ArrayList<>();
+
+    public List<Map<String, Object>> getRdsList() {
+        return rdsList;
+    }
+
+    public void setRdsList(List<Map<String, Object>> rdsList) {
+        this.rdsList = rdsList;
+    }
 
     // for mq
     private String mqPlatform;
@@ -43,6 +58,7 @@ public class SrvConfig {
     private String redisSignatureVersion;
     private String redisUrl;
     private String redisDescribeInstances;
+
     public String getRedisDescribeInstances() {
         return redisDescribeInstances;
     }
