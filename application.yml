@@ -15,17 +15,18 @@ srv:
   mqRegionId: shihua
   mqConsumerId: CID_CRM_TEST_1206
   mqTopicDetail: true
-  ## redis配置
-  redisFormat: JSON
-  redisVersion: 2015-01-01
-  redisSignatureMethod: HMAC-SHA1
-  redisslbSignatureVersion: 1.0
-  redisUrl: http://kvstore.cpct.com.cn
-  redisDescribeInstances: DescribeInstances
-  redisDescribeHistoryMonitorValues: DescribeHistoryMonitorValues
-  redisInstanceId: 74314bb1fe9c4ecc
-  redisIntervalForHistory: 01m
-  ## slb配置
+  ## 多个redis配置 （注：当同一服务配置多个实例数据时，配置项名字需要小写）
+  redisList:
+    - format: JSON
+      version: 2015-01-01
+      signaturemethod: HMAC-SHA1
+      signatureversion: 1.0
+      url: http://kvstore.cpct.com.cn
+      descinstances: DescribeInstances
+      deschistorymonitorvalues: DescribeHistoryMonitorValues
+      instanceid: 74314bb1fe9c4ecc
+      interval: 01m
+  ## 多个slb配置
   slbList:
     - format: JSON
       version: 2014-05-15
@@ -43,7 +44,7 @@ srv:
       action: DescribeHealthStatus
       loadbalancerid: 161fa5394b3-cn-beijing-zgyz-d01
       listenerport: 80      
-  ## 多个配置
+  ## 多个rds配置
   rdsList:
     - format: JSON
       version: 2014-08-15

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.ai.prometheus.rds.RDS;
 import com.ai.prometheus.util.HttpClientFactory;
 import com.ai.prometheus.util.SrvConfig;
 import com.aliyun.openservices.ons.api.impl.authority.OnsAuthSigner;
@@ -16,6 +17,7 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MQ {
+    private Logger logger = Logger.getLogger(RDS.class);
     
     @Autowired
     private SrvConfig config;
@@ -83,15 +86,12 @@ public class MQ {
         List<MQBean> list = new ArrayList<MQBean>();
         try {
             String json = EntityUtils.toString(response.getEntity());
-//            System.out.println(json);
             JSONObject object = new JSONObject(json);
             JSONObject data = (JSONObject) object.get("data");
             JSONArray jsonArray = data.getJSONArray("detailInTopicList");
-//            System.out.println(jsonArray);
+            logger.info(jsonArray);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
-                System.out.println("++++ topic is : " + obj.get("topic") +
-                    "  ++++ totalDiff is : " + obj.get("totalDiff"));
                 
                 MQBean bean = new MQBean();
                 bean.setTopic((String)obj.get("topic"));
@@ -99,8 +99,9 @@ public class MQ {
                 
                 list.add(bean);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            logger.error(ex.getMessage());
+            ex.printStackTrace();
         } 
         
         return list;

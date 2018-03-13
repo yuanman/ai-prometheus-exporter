@@ -13,13 +13,16 @@ public class RegisterController {
     @Autowired
     private RDSEndpoint rdsExporter;
     
-    @Autowired
+    @Autowired  
     private SLBEndpoint slbExporter;
+    @Autowired
+    private RedisEndpoint redisExporter;
     
     @RequestMapping("/register")
     public void rdsExporter() {
         mqExporter.register();
         rdsExporter.register();
         slbExporter.register();
+        redisExporter.register();
     }
 }

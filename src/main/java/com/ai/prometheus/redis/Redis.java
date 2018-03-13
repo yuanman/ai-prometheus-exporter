@@ -15,8 +15,11 @@ import java.util.TreeMap;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 
+import com.ai.prometheus.slb.SLB;
+import com.ai.prometheus.util.BeanUtils;
 import com.ai.prometheus.util.HttpClientFactory;
 import com.ai.prometheus.util.SrvConfig;
+import com.ai.prometheus.vo.RedisConfig;
 import com.aliyun.openservices.ons.api.impl.authority.OnsAuthSigner;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -26,20 +29,25 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class Redis {
+    private Logger logger = Logger.getLogger(SLB.class);
 
     @Autowired
     private SrvConfig config;
 
-    public HttpResponse postRequest(String url, String... args) {
+    public HttpResponse postRequest(RedisConfig redis, String url, String... args) {
         String accesskey = config.getAccesskey(); // 2SbUQlH7FJKyur9V
         String securityKey = config.getSecurityKey(); // WGoQpjLNgTA4VwrHNQBcqe0zDbXZti
-        String format = config.getRdsFormat(); // JSON
-        String version = config.getRdsVersion(); // 2015-01-01
-        String signatureMethod = config.getRdsSignatureMethod(); // HMAC-SHA1
-        String signatureVersion = config.getRdsSignatureVersion(); // 1.0
+
+        String format = redis.getFormat(); // JSON
+        String version = redis.getVersion(); // 2015-01-01
+        String signatureMethod = redis.getSignaturemethod(); // HMAC-SHA1
+        String signatureVersion = redis.getSignatureversion(); // 1.0
 
         Map<String, String> paras = new TreeMap<>();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
@@ -106,27 +114,18 @@ public class Redis {
 
     /**
      * 对DescribeHistoryMonitorValues方法返回的数据进行解析， 并设置RedisBean的usedMemory值
-     * 
-     * @param bean
-     * @param json
-     * @throws JSONException
-     * @throws Exception
      */
     public void parseUsedMemory(RedisBean bean, String json) throws JSONException, Exception {
-        System.out.println(json);
-
         org.json.JSONObject object = new org.json.JSONObject(json);
         String monitorHistory = object.getString("MonitorHistory");
-        System.out.println(monitorHistory);
+        logger.info(monitorHistory);
 
         com.alibaba.fastjson.JSONArray jarr = com.alibaba.fastjson.JSONArray.parseArray("[" + monitorHistory + "]");
         for (Iterator<Object> iterator = jarr.iterator(); iterator.hasNext();) {
             com.alibaba.fastjson.JSONObject job = (com.alibaba.fastjson.JSONObject)iterator.next();
             Set<String> s = job.keySet();
             for (String string : s) {
-                System.out.println(job.get(string));
                 JSONObject temp = JSONObject.parseObject(job.get(string) + "");
-                System.out.println(temp.get("UsedMemory"));
                 bean.setUsedMemCache(temp.get("UsedMemory") + "");
             }
         }
@@ -134,17 +133,12 @@ public class Redis {
 
     /**
      * 对DescribeInstanceAttribute方法返回的数据进行解析， 并设置RedisBean的capacity值
-     * 
-     * @param bean
-     * @param json
-     * @throws JSONException
-     * @throws Exception
      */
     public void parseCapacity(RedisBean bean, String json) throws JSONException, Exception {
         org.json.JSONObject object = new org.json.JSONObject(json);
         org.json.JSONObject instances = (org.json.JSONObject)object.get("Instances");
         org.json.JSONArray kvStoreInstanceArray = instances.getJSONArray("KVStoreInstance");
-        System.out.println(kvStoreInstanceArray);
+        logger.info(kvStoreInstanceArray);
 
         if (kvStoreInstanceArray.length() > 0) {
             org.json.JSONObject obj = kvStoreInstanceArray.getJSONObject(0);
@@ -152,45 +146,61 @@ public class Redis {
         }
     }
 
-    public RedisBean getRedisMetrics() {
-        String redisUrl = config.getRedisUrl();
-        String instanceId = "InstanceId:" + config.getRedisInstanceId();
-        String instanceIds = "InstanceIds:" + config.getRedisInstanceId();
-        String actionDescribeInstances = "Action:" + config.getRedisDescribeInstances();
-        String actionDescribeHistoryMonitorValues = "Action:" + config.getRedisDescribeHistoryMonitorValues();
-        String intervalForHistory = "IntervalForHistory:" + config.getRedisIntervalForHistory();
-
-        // 1.first to get redis capacity.
-        HttpResponse response_1 = postRequest(redisUrl, actionDescribeInstances, instanceIds);
-
-        RedisBean bean = new RedisBean();
-        bean.setInstanceId(config.getRedisInstanceId());
+    /**
+     * 获取 Redis 实例的内存数据
+     */
+    public List<RedisBean> getRedisMetrics() {
+        List<RedisBean> rs = new ArrayList<RedisBean>();
+        BeanUtils<RedisConfig> beanUtils = new BeanUtils<RedisConfig>();
         try {
-            String json_1 = EntityUtils.toString(response_1.getEntity());
-            System.out.println(json_1);
-            parseCapacity(bean, json_1);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
+            List<RedisConfig> redisList = beanUtils.ListMap2JavaBean(config.getRedisList(), RedisConfig.class);
+
+            /** 根据配置文件中redis，请求获取redis监控数据 **/
+            for (int i = 0; i < redisList.size(); i++) {
+                RedisConfig redis = redisList.get(i);
+
+                String redisUrl = redis.getUrl();
+                String instanceId = "InstanceId:" + redis.getInstanceid();
+                String instanceIds = "InstanceIds:" + redis.getInstanceid();
+                String actionDescribeInstances = "Action:" + redis.getDescinstances();
+                String actionDescribeHistoryMonitorValues = "Action:" + redis.getDeschistorymonitorvalues();
+                String intervalForHistory = "IntervalForHistory:" + redis.getInterval();
+
+                RedisBean bean = new RedisBean();
+                bean.setInstanceId(redis.getInstanceid());
+
+                // 1.first to get redis capacity.
+                HttpResponse response_1 = postRequest(redis, redisUrl, actionDescribeInstances, instanceIds);
+                try {
+                    String json_1 = EntityUtils.toString(response_1.getEntity());
+                    logger.info(json_1);
+                    parseCapacity(bean, json_1);
+                } catch (Exception ex) {
+                    logger.error(ex.getMessage());
+                    ex.printStackTrace();
+                }
+
+                // 2.get usedMemory.
+                // 查看redis监控值,注意时区为0时区，时间要减8:00
+                HttpResponse response = postRequest(redis, redisUrl, actionDescribeHistoryMonitorValues, instanceId,
+                    "StartTime:2018-03-08T08:00:00Z", "EndTime:2018-03-08T08:01:00Z", intervalForHistory);
+                try {
+                    String json = EntityUtils.toString(response.getEntity());
+                    logger.info(json);
+                    parseUsedMemory(bean, json);
+                } catch (Exception ex) {
+                    logger.error(ex.getMessage());
+                    ex.printStackTrace();
+                }
+
+                rs.add(bean);
+            }
+        } catch (Exception ex) {
+            logger.error(ex.getMessage());
+            ex.printStackTrace();
         }
 
-        // 2.get usedMemory.
-        // 查看redis监控值,注意时区为0时区，时间要减8:00
-        HttpResponse response = postRequest(redisUrl, actionDescribeHistoryMonitorValues, instanceId,
-            "StartTime:2018-03-08T08:00:00Z", "EndTime:2099-03-08T11:01:00Z", intervalForHistory);
-        try {
-            String json = EntityUtils.toString(response.getEntity());
-            System.out.println(json);
-
-            parseUsedMemory(bean, json);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return bean;
+        return rs;
     }
 
     public static void main(String[] args) {
