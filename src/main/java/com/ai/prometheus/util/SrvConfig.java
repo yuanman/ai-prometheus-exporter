@@ -20,6 +20,15 @@ public class SrvConfig {
     private String mqConsumerId;
     private String mqTopicDetail;
 
+    // for edas
+    private String edasUrl;
+    private String edasLogUrl;
+    private String edasAction;
+    private String edasLogIndex;
+    private String edasLogTimeRange;
+    private String edasLogMessageKey;
+    private String edasLogLevel;
+
     // for rdsList
     private List<Map<String, Object>> rdsList = new ArrayList<>();
 
@@ -107,6 +116,62 @@ public class SrvConfig {
 
     public void setMqTopicDetail(String mqTopicDetail) {
         this.mqTopicDetail = mqTopicDetail;
+    }
+
+    public String getEdasUrl() {
+        return edasUrl;
+    }
+
+    public void setEdasUrl(String edasUrl) {
+        this.edasUrl = edasUrl;
+    }
+
+    public String getEdasLogUrl() {
+        return edasLogUrl;
+    }
+
+    public void setEdasLogUrl(String edasLogUrl) {
+        this.edasLogUrl = edasLogUrl;
+    }
+
+    public String getEdasAction() {
+        return edasAction;
+    }
+
+    public void setEdasAction(String edasAction) {
+        this.edasAction = edasAction;
+    }
+
+    public String getEdasLogIndex() {
+        return edasLogIndex;
+    }
+
+    public void setEdasLogIndex(String edasLogIndex) {
+        this.edasLogIndex = edasLogIndex;
+    }
+
+    public String getEdasLogTimeRange() {
+        return edasLogTimeRange;
+    }
+
+    public void setEdasLogTimeRange(String edasLogTimeRange) {
+        this.edasLogTimeRange = edasLogTimeRange;
+    }
+
+    public String getEdasLogMessageKey() {
+        return edasLogMessageKey;
+    }
+
+    public void setEdasLogMessageKey(String edasLogMessageKey) {
+        this.edasLogMessageKey = edasLogMessageKey;
+    }
+
+    public String getEdasLogLevel() {
+        return edasLogLevel;
+    }
+
+    public void setEdasLogLevel(String edasLogLevel) {
+        this.edasLogLevel = edasLogLevel;
     }
 
 }
