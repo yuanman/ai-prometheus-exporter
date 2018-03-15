@@ -16,15 +16,15 @@ public class EDAS {
     private static Logger logger = Logger.getLogger(EDAS.class);
 
     @Autowired
-    private SrvConfig config;
+    private static SrvConfig config;
 
-    public List<EDASBean> getEdasAppInfo() {
+    public static List<EDASBean> getEdasAppInfo() {
         String accesskey = config.getAccesskey(); // 2SbUQlH7FJKyur9V
         String securityKey = config.getSecurityKey(); // WGoQpjLNgTA4VwrHNQBcqe0zDbXZti
         String url = config.getEdasUrl();
         String action = config.getEdasAction();
         List<EDASBean> list = new ArrayList<EDASBean>();
-        
+
         try {
             /** 获取应用列表 **/
             EdasApiClient edasApiClient = new EdasApiClient(url, accesskey, securityKey);
@@ -39,28 +39,7 @@ public class EDAS {
         return list;
     }
 
-//    public List<EDASBean> countEdasException() {
-//        String url = config.getEdasLogUrl();
-//        String logIndex = config.getEdasLogIndex();
-//        String logTimeRange = config.getEdasLogTimeRange();
-//        String logMessageKey = config.getEdasLogMessageKey();
-//        String logLevel = config.getEdasLogLevel();
-//
-//        try {
-//            /** 获取log中exception的统计数据 **/
-////            String rsp = edasApiClient.callApi("/app/app_list", null);
-//            logger.info(rsp);
-//
-//            parse(rsp, list);
-//        } catch (Exception ex) {
-//            logger.error("request edas /app/app_list error. [" + ex.getMessage() + "]");
-//            ex.printStackTrace();
-//        }
-//
-//        return list;
-//    }
-    
-    public static List<EDASBean> parseAppList(String rsp, List<EDASBean> list) {
+    private static List<EDASBean> parseAppList(String rsp, List<EDASBean> list) {
         try {
             JSONObject object = new JSONObject(rsp);
             JSONArray dataArray = object.getJSONArray("data");
@@ -72,9 +51,9 @@ public class EDAS {
                 appBean.setAppName((String)app.get("name"));
                 appBean.setAppState((String)app.get("state"));
                 appBean.setInstanceAmount((Integer)app.get("instances"));
-                
+
                 JSONArray jsonArray = app.getJSONArray("ecus");
-                //logger.info(jsonArray);
+                // logger.info(jsonArray);
                 List<EDASInstance> instanceList = new ArrayList<EDASInstance>();
                 for (int j = 0; j < jsonArray.length(); j++) {
                     JSONObject obj = jsonArray.getJSONObject(j);
@@ -86,7 +65,7 @@ public class EDAS {
                     instanceList.add(bean);
                 }
                 appBean.setAppList(instanceList);
-                
+
                 list.add(appBean);
             }
         } catch (Exception ex) {
@@ -98,18 +77,19 @@ public class EDAS {
     }
 
     public static void main(String[] args) {
+        /**** 阿里EDAS api ****/
         EdasApiClient edasApiClient = new EdasApiClient("http://edas.console.cpct.com.cn/api", "2SbUQlH7FJKyur9V",
             "WGoQpjLNgTA4VwrHNQBcqe0zDbXZti");
         try {
             String rsp = "-1";
-            // 获取应用列表
+            // 接口1：获取应用列表
             rsp = edasApiClient.callApi("/app/app_list", null);
             List<EDASBean> list = new ArrayList<EDASBean>();
             parseAppList(rsp, list);
-            // 获取应用信息
-//            Map<String, String> params = new HashMap<String, String>();
-//            params.put("AppId", "0e129cc4-32bd-48ff-8ba8-e14803049486");
-//            resp = edasApiClient.callApi("/app/app_info", params);
+            // 接口2:获取应用信息
+            // Map<String, String> params = new HashMap<String, String>();
+            // params.put("AppId", "0e129cc4-32bd-48ff-8ba8-e14803049486");
+            // resp = edasApiClient.callApi("/app/app_info", params);
         } catch (Exception e) {
             e.printStackTrace();
         }
