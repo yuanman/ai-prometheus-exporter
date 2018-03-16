@@ -18,10 +18,10 @@ srv:
   mqTopicDetail: true
   ## edas 监控参数 ###
   edasUrl: http://edas.console.cpct.com.cn/api
-  edasLogUrl: http://192.168.248.173:9200
+  edasLogUrl: http://192.168.248.173:9200/
   edasAction: /app/app_list
   edasLogIndex: edas*
-  edasLogTimeRange: 3m
+  edasLogTimeRange: 1m
   edasLogMessageKey: exception
   edasLogLevel: ERROR
   ## 多个redis配置 （注：当同一服务配置多个实例数据时，配置项名字需要小写）

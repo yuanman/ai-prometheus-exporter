@@ -27,8 +27,7 @@ public class AppLogs {
      * 请求elasticsearch，获取应用异常日志的统计结果。
      */
     public List<LogBean> getAppLogs() {
-        String url = config.getEdasLogUrl();
-//        String logIndex = config.getEdasLogIndex();
+        String url = config.getEdasLogUrl() + config.getEdasLogIndex() + "/_search";
         String logTimeRange = config.getEdasLogTimeRange();
         String logMessageKey = config.getEdasLogMessageKey();
         String logLevel = config.getEdasLogLevel();
@@ -48,7 +47,9 @@ public class AppLogs {
             + "\"aggs\": {\"exceptionList\": "
             + "{\"terms\": {\"field\": \"ip\" }}}}},"
             + "\"size\": 0 }";
-
+        
+        logger.info(data);
+        
         try {
             StringEntity requestEntity = new StringEntity(data, "UTF-8");
             requestEntity.setContentType("application/json");

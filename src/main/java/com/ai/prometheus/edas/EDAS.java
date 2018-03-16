@@ -16,9 +16,9 @@ public class EDAS {
     private static Logger logger = Logger.getLogger(EDAS.class);
 
     @Autowired
-    private static SrvConfig config;
+    private SrvConfig config;
 
-    public static List<EDASBean> getEdasAppInfo() {
+    public List<EDASBean> getEdasAppInfo() {
         String accesskey = config.getAccesskey(); // 2SbUQlH7FJKyur9V
         String securityKey = config.getSecurityKey(); // WGoQpjLNgTA4VwrHNQBcqe0zDbXZti
         String url = config.getEdasUrl();
@@ -61,7 +61,7 @@ public class EDAS {
                     bean.setAppId((String)app.get("appId"));
                     bean.setInstanceName((String)obj.get("name"));
                     bean.setIpAddr((String)obj.get("ipAddr"));
-                    bean.setState((String)obj.get("nodeState"));
+                    bean.setState(obj.get("nodeState").equals("OK")?"0":"1");
                     instanceList.add(bean);
                 }
                 appBean.setAppList(instanceList);

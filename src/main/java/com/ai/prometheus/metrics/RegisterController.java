@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class RegisterController {
 
     @Autowired
+    private AppLogEndpoint appLogExporter;
+    
+    @Autowired
     private MQEndpoint mqExporter;
     
     @Autowired
@@ -15,14 +18,20 @@ public class RegisterController {
     
     @Autowired  
     private SLBEndpoint slbExporter;
+    
     @Autowired
     private RedisEndpoint redisExporter;
     
+    @Autowired
+    private EDASEndpoint edasExporter;
+    
     @RequestMapping("/register")
     public void rdsExporter() {
+        appLogExporter.register();
         mqExporter.register();
         rdsExporter.register();
         slbExporter.register();
         redisExporter.register();
+        edasExporter.register();
     }
 }
