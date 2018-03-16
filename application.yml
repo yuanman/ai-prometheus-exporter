@@ -21,7 +21,7 @@ srv:
   edasLogUrl: http://192.168.248.173:9200/
   edasAction: /app/app_list
   edasLogIndex: edas*
-  edasLogTimeRange: 1h
+  edasLogTimeRange: 3d
   edasLogMessageKey: exception
   edasLogLevel: ERROR
   ## 多个redis配置 （注：当同一服务配置多个实例数据时，配置项名字需要小写）

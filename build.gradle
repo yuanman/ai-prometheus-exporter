@@ -31,6 +31,7 @@ repositories {
 }
 
 dependencies {
+    compile files('lib/edas-open-api-sdk-2.10.1.jar')
     compile("org.springframework.boot:spring-boot-starter-web") {
         exclude module: "spring-boot-starter-tomcat"
     }

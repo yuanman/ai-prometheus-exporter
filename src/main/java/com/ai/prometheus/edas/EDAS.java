@@ -29,7 +29,7 @@ public class EDAS {
             /** 获取应用列表 **/
             EdasApiClient edasApiClient = new EdasApiClient(url, accesskey, securityKey);
             String rsp = edasApiClient.callApi(action, null);
-            logger.info(rsp);
+//            logger.info(rsp);
             parseAppList(rsp, list);
         } catch (Exception ex) {
             logger.error("request edas " + action + " error. [" + ex.getMessage() + "]");
@@ -43,7 +43,7 @@ public class EDAS {
         try {
             JSONObject object = new JSONObject(rsp);
             JSONArray dataArray = object.getJSONArray("data");
-            logger.info(dataArray);
+//            logger.info(dataArray);
             for (int i = 0; i < dataArray.length(); i++) {
                 JSONObject app = dataArray.getJSONObject(i);
                 EDASBean appBean = new EDASBean();
